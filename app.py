@@ -29,42 +29,38 @@ PERSIST_DIR = os.path.join(BASE_DIR, "chroma_db")
 
 embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
 
-if not os.path.exists(PERSIST_DIR):
-    print("Creating vector database...")
-    #The glob module in Python is a built-in library used for finding file pathnames that match a specified pattern
-    import glob
+import glob
+import shutil
 
-    documents = []
+# Always rebuild to pick up new docs
+if os.path.exists(PERSIST_DIR):
+    shutil.rmtree(PERSIST_DIR)
 
-    for file in glob.glob("docs/*.txt"):
-        loader = TextLoader(file)
-        docs = loader.load()
+print("Creating vector database...")
 
-        for d in docs:
-            d.metadata["source"] = file
-        documents.extend(docs)
-    print("Total documents loaded:", len(documents))
+documents = []
 
-    text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=1000,
-        chunk_overlap=200
-    )
-    chunks = text_splitter.split_documents(documents)
+for file in glob.glob("docs/*.txt"):
+    loader = TextLoader(file)
+    docs = loader.load()
+    for d in docs:
+        d.metadata["source"] = file
+    documents.extend(docs)
 
-    vector_store = Chroma.from_documents(
-        documents=chunks,
-        embedding=embeddings,
-        persist_directory=PERSIST_DIR
-    )
-    vector_store.persist()
-    
+print("Total documents loaded:", len(documents))
 
-else:
-    print("Loading existing vector database...")
-    vector_store = Chroma(
-        persist_directory=PERSIST_DIR,
-        embedding_function=embeddings
-    )
+text_splitter = RecursiveCharacterTextSplitter(
+    chunk_size=1000,
+    chunk_overlap=200
+)
+chunks = text_splitter.split_documents(documents)
+
+vector_store = Chroma.from_documents(
+    documents=chunks,
+    embedding=embeddings,
+    persist_directory=PERSIST_DIR
+)
+vector_store.persist()
    
 
 
