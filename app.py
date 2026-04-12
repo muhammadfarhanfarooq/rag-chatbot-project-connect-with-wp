@@ -8,7 +8,7 @@ from langchain_community.document_loaders import TextLoader
 from langchain_classic.chains import RetrievalQAWithSourcesChain
 from langchain_core.prompts import PromptTemplate
 
-openai_api_key = os.environ.get("OPENAI_API_KEY")
+openai_api_key = os.environ.get("OPENAI_API_KEY", "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")
 print("DEBUG KEY VALUE:", openai_api_key[:10] if openai_api_key else "NOT FOUND")
 if not openai_api_key:
     raise ValueError("OPENAI_API_KEY is missing")
