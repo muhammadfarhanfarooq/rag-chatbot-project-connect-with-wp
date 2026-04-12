@@ -112,6 +112,9 @@ def ask_pdf(question):
         result = qa_chain.invoke({"question": refined_question})
 
         answer = result["answer"]
+        sources= result.get("sources","")
+        print("DEBUG ANSWER:", answer)      
+        print("DEBUG SOURCES:", sources)
 
         # Escalate only if no real answer was found
         if not answer or "i don't know" in answer.lower():
@@ -126,3 +129,5 @@ def ask_pdf(question):
 
 if __name__ == "__main__":
     print(ask_pdf("What is number system?"))
+
+
