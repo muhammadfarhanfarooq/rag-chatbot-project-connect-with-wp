@@ -68,7 +68,7 @@ vector_store.persist()
 
 # ---------- STEP 2: CREATE RETRIEVER + LLM ----------
 
-retriever = vector_store.as_retriever(search_kwargs={"k": 8})
+retriever = vector_store.as_retriever(search_kwargs={"k": 10})
 
 llm = ChatOpenAI(
     model="gpt-4o-mini",
@@ -78,10 +78,9 @@ llm = ChatOpenAI(
 
 
 prompt_template = """
-You are a helpful assistant for a school website.
-
-ONLY answer using the provided context.
-If the answer is not in the context, say "I don't know".
+You are a helpful assistant. Use the context below to answer the question.
+If the context contains relevant information, use it to give a helpful answer.
+Only say you don't know if the context has absolutely nothing related.
 
 Context:
 {summaries}
