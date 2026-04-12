@@ -10,6 +10,7 @@ from langchain_core.prompts import PromptTemplate
 
 load_dotenv()
 openai_api_key = os.getenv("OPENAI_API_KEY")
+print("DEBUG KEY VALUE:", openai_api_key[:10])
 if not openai_api_key:
     raise ValueError("OPENAI_API_KEY is missing")
 
