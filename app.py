@@ -50,7 +50,7 @@ for file in glob.glob("docs/*.txt"):
 print("Total documents loaded:", len(documents))
 
 text_splitter = RecursiveCharacterTextSplitter(
-    chunk_size=1000,
+    chunk_size=200,
     chunk_overlap=200
 )
 chunks = text_splitter.split_documents(documents)
@@ -68,7 +68,7 @@ vector_store.persist()
 
 # ---------- STEP 2: CREATE RETRIEVER + LLM ----------
 
-retriever = vector_store.as_retriever(search_kwargs={"k": 10})
+retriever = vector_store.as_retriever(search_kwargs={"k": 3})
 
 llm = ChatOpenAI(
     model="gpt-4o-mini",
